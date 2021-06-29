@@ -6,9 +6,8 @@ module.exports = {
         index: './src/index.ts',
     },
     output: {
-        filename:  '[name].[contenthash].js',
+        filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),
-        clean: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -21,16 +20,19 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: ['style-loader','css-loader']
+                include: path.resolve(__dirname, 'src'),
+                use: ['style-loader', 'css-loader']
             },
             {
-                test:/\.(png|svg|jpg|jpeg|gif)$/i,
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                include: path.resolve(__dirname, 'src'),
                 type: "asset/resource",
             },
             {
                 test: /\.(js|ts)$/,
-                exclude: /(node_modules|bower_components)/,
+                include: path.resolve(__dirname, 'src'),
                 loader: "ts-loader",
+                options: {}
             },
         ]
     },
