@@ -8,12 +8,17 @@ module.exports = {
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),
+        clean: true
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "Learn Pixi - Lewin"
+            title: "Learn Pixi - Lewin",
+            template: "./src/index.html"
         })
     ],
+    externals: {
+        "pixi.js": "PIXI",
+    },
     mode: "production",
     // devtool: "inline-source-map",
     module: {
