@@ -2,9 +2,13 @@ import * as PIXI from "pixi.js"
 
 
 interface BunnyProp {
-    speed: number,
-    turningSpeed: number,
-    direction: number,
+    speed: number
+    turningSpeed: number
+    direction: number
+}
+
+class BunnySprite extends PIXI.Sprite {
+    props: BunnyProp
 }
 
 function main() {
@@ -13,37 +17,37 @@ function main() {
     });
     document.body.appendChild(app.view);
 
-    const container = new PIXI.Container();
-    app.stage.addChild(container);
+    const bunnyContainer = new PIXI.Container();
+    app.stage.addChild(bunnyContainer);
 
     const texture = PIXI.Texture.from('https://pixijs.io/examples/examples/assets/bunny.png');
 
-    const bunnyProps: { bunny: PIXI.Sprite, prop: BunnyProp }[] = []
     for (let i = 0; i < 100; i++) {
-        const bunny = new PIXI.Sprite(texture);
+        const bunny = new BunnySprite(texture);
+        bunny.props = {
+            speed: Math.random() * 5,
+            turningSpeed: Math.random() - 0.8,
+            direction: Math.random() * Math.PI * 2,
+        }
         bunny.x = Math.random() * app.view.width
         bunny.y = Math.random() * app.view.height
         bunny.tint = Math.random() * 0xFFFFFF
         bunny.scale.set(0.5 + Math.random())
 
-        const prop: BunnyProp = {
-            speed: Math.random()*5,
-            turningSpeed: Math.random() - 0.8,
-            direction: Math.random() * Math.PI * 2,
-        }
-        bunnyProps.push({bunny, prop})
-        container.addChild(bunny);
+        bunnyContainer.addChild(bunny);
     }
 
-    const bunnyBounds = new PIXI.Rectangle(-100, -100, app.screen.width + 200, app.screen.height + 200)
+    const extraBound = 100
+    const bunnyBounds = new PIXI.Rectangle(-extraBound, -extraBound, app.screen.width + 2 * extraBound, app.screen.height + 2 * extraBound)
 
     app.ticker.add((delta) => {
-        bunnyProps.forEach(({bunny, prop}, i) => {
+        bunnyContainer.children.forEach((bunny: BunnySprite) => {
             // 计算运动
-            prop.direction += prop.turningSpeed * 0.01 * delta
-            bunny.x += Math.sin(prop.direction) * prop.speed * delta
-            bunny.y += Math.cos(prop.direction) * prop.speed * delta
-            bunny.rotation = -prop.direction-Math.PI
+            const {props} = bunny
+            props.direction += props.turningSpeed * 0.01 * delta
+            bunny.x += Math.sin(props.direction) * props.speed * delta
+            bunny.y += Math.cos(props.direction) * props.speed * delta
+            bunny.rotation = -props.direction - Math.PI
 
             // 检查超出边界
             if (bunny.x > bunnyBounds.width + bunnyBounds.x) {
