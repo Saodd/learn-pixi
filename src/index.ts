@@ -12,6 +12,8 @@ class BunnySprite extends PIXI.Sprite {
 }
 
 function main() {
+    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
     const app = new PIXI.Application({
         width: 1000, height: 1000, backgroundColor: 0x0, resolution: 1,
     });
@@ -33,6 +35,12 @@ function main() {
         bunny.y = Math.random() * app.view.height
         bunny.tint = Math.random() * 0xFFFFFF
         bunny.scale.set(0.5 + Math.random())
+        bunny.anchor.set(0.5)
+
+        bunny.interactive = true;
+        bunny.on("pointerdown", function (this: BunnySprite) {
+            this.props.direction += Math.PI
+        })
 
         bunnyContainer.addChild(bunny);
     }
