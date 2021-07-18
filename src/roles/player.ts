@@ -1,9 +1,12 @@
 import * as PIXI from "pixi.js";
-import {calcMove, distanceOfPoints, MoveProps} from "./models/move";
+import {calcMove, distanceOfPoints, MoveProps} from "../models/move";
+import {BulletSprite, pushBullet} from "./bullet";
 
 
 export class PlayerSprite extends PIXI.Sprite {
     moveProps: MoveProps
+    shotCount: number = 0
+    shotSpeed: number = 10
 }
 
 export function addPlayer(app: PIXI.Application) {
@@ -32,10 +35,11 @@ export function addPlayer(app: PIXI.Application) {
             const v = distanceOfPoints(mouse, player)
             const angle = Math.atan2(mouse.y - player.y, mouse.x - player.x)
             mp.v.x = Math.cos(angle) * v * BaseSpeed
-            mp.v.y = Math.sin(angle) * v *BaseSpeed
+            mp.v.y = Math.sin(angle) * v * BaseSpeed
         }
         calcMove(player, delta)
         limitMoveRange(player, app)
+        shoot(player, delta)
     })
 }
 
@@ -56,3 +60,18 @@ function limitMoveRange(p: PlayerSprite, app: PIXI.Application) {
     }
 }
 
+function shoot(player: PlayerSprite, delta: number) {
+    player.shotCount += delta
+    if (player.shotCount < player.shotSpeed) return;
+    player.shotCount -= player.shotSpeed
+    const bullet = new BulletSprite(
+        PIXI.Texture.from('bunny'),
+        {r: 0, ra: 0, v: {x: 0, y: -10}, va: {x: 0, y: 0}},
+        []
+    )
+    bullet.anchor.set(0.5)
+    bullet.scale.set(0.5)
+    bullet.x = player.x
+    bullet.y = player.y - 37
+    pushBullet(bullet)
+}
