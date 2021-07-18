@@ -1,3 +1,3 @@
-export interface Character {
+export interface Character extends PIXI.Sprite {
     onHit: () => void;
 }

@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import {calcMove, distanceOfPoints, MoveProps} from "../models/move";
 import {BulletSprite, pushBullet} from "./bullet";
+import {bossContainer, BossSprite} from "./boss";
 
 
 export class PlayerSprite extends PIXI.Sprite {
@@ -67,7 +68,7 @@ function shoot(player: PlayerSprite, delta: number) {
     const bullet = new BulletSprite(
         PIXI.Texture.from('bunny'),
         {r: 0, ra: 0, v: {x: 0, y: -10}, va: {x: 0, y: 0}},
-        []
+        bossContainer.children as BossSprite[],
     )
     bullet.anchor.set(0.5)
     bullet.scale.set(0.5)

@@ -1,10 +1,12 @@
 import * as PIXI from "pixi.js"
 import {addPlayer} from "./roles/player";
 import {initBulletsTicker} from "./roles/bullet";
+import {initBoss} from "./roles/boss";
 
 
 function gameInit(app: PIXI.Application) {
     addPlayer(app)
+    initBoss(app)
     initBulletsTicker(app)
     app.start()
 }
