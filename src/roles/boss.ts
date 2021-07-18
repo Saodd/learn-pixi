@@ -7,10 +7,16 @@ export class BossSprite extends PIXI.Sprite {
 
     onHit() {
         this.health -= 1
-        console.log('hit!', this.health)
+        console.log(`boss剩余血量: ${this.health}`)
         if (this.health === 0) {
             bossContainer.removeChild(this)
+        } else {
+            this.tint = 0xAAAAAA
         }
+    }
+
+    turn() {
+        if (this.x < 200 || this.x > 800) this.moveProps.v.x *= -1
     }
 }
 
@@ -33,7 +39,7 @@ function addBoss1(app: PIXI.Application) {
     const mp = {
         r: 0,
         ra: 0,
-        v: {x: 0, y: 0},
+        v: {x: 5, y: 0},
         va: {x: 0, y: 0},
     }
     boss.moveProps = mp
@@ -41,5 +47,7 @@ function addBoss1(app: PIXI.Application) {
     bossContainer.addChild(boss)
     app.ticker.add(delta => {
         calcMove(boss, delta)
+        boss.tint = 0xFFFFFF
+        boss.turn()
     })
 }
